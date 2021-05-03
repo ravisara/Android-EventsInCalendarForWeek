@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.eventsincalendarforweek.R
 import com.example.eventsincalendarforweek.repository.RetrofitInstance
+import retrofit2.HttpException
 import java.io.IOException
-import java.lang.Exception
 
 const val TAG = "MainFragmentError"
 // TODO use view data binding
@@ -25,6 +25,7 @@ class MainFragment : Fragment() {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var theRecyclerView : RecyclerView
+    private lateinit var customAdapterForRecyclerView: CustomAdapterForRecyclerView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -36,16 +37,30 @@ class MainFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         // TODO: Use the ViewModel
 
+
         lifecycleScope.launchWhenCreated {
             val response = try {
                 RetrofitInstance.api.getAllCalendarEvents()
-            } catch (e: Exception) {
-                Log.e(TAG, "onActivityCreated: error fetching calendar events from the API. More information: ${e.message}", )
+            } catch(e: IOException) {
+                Log.e(TAG, "IOException, check your internet connection")
+                return@launchWhenCreated
+            } catch (e: HttpException) {
+                Log.e(TAG, "HttpException, unexpected response")
+                return@launchWhenCreated
             }
+            /*} catch (e: Exception) {
+                //Log.e(TAG, "onActivityCreated: error fetching calendar events from the API. More information: ${e.message}", )
+            }*/
             Log.i(TAG, response.toString())
+            if(response.isSuccessful && response.body() != null) {
+                val resultsToShow = response.body()!!.results
+                customAdapterForRecyclerView = CustomAdapterForRecyclerView(resultsToShow)
+                setupRecyclerView()
+            }
+
         }
 
-        setupRecyclerView()
+
 
     }
 
@@ -65,8 +80,7 @@ class MainFragment : Fragment() {
     }
 
     private fun setupRecyclerView() = theRecyclerView.apply {
-        val dummyDataSet = listOf<String>("event 1", "event 2", "event 3")
-        adapter = CustomAdapterForRecyclerView(dummyDataSet)
+        adapter = customAdapterForRecyclerView
         layoutManager = LinearLayoutManager(requireContext())
     }
 

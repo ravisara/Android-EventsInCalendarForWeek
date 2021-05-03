@@ -6,8 +6,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.eventsincalendarforweek.R
+import com.example.eventsincalendarforweek.repository.Result
 
-class CustomAdapterForRecyclerView(private val dataSet: List<String>) : RecyclerView.Adapter<CustomAdapterForRecyclerView.ViewHolder>() { // to begin with just one string per line is passed
+class CustomAdapterForRecyclerView(private val dataSet: List<Result>) : RecyclerView.Adapter<CustomAdapterForRecyclerView.ViewHolder>() { // to begin with just one string per line is passed
 
     /**
     * Provide a reference to the type of views that you are using
@@ -41,9 +42,9 @@ class CustomAdapterForRecyclerView(private val dataSet: List<String>) : Recycler
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        viewHolder.labelTextView.text = dataSet[position]
-        viewHolder.startDateTextView.text = "TODO1"
-        viewHolder.endDateTextView.text = "TODO2"
+        viewHolder.labelTextView.text = dataSet[position].label
+        viewHolder.startDateTextView.text = dataSet[position].start
+        viewHolder.endDateTextView.text = dataSet[position].end
     }
 
     // Return the size of your dataset (invoked by the layout manager)
