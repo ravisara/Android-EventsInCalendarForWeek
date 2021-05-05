@@ -3,7 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="180dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/my_custom_background_for_linear_layout"
+    >
 
     <TextView
         android:id="@+id/eventLabel"
