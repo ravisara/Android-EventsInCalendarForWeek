@@ -1,4 +1,4 @@
-package com.example.eventsincalendarforweek.ui.main
+package com.example.eventsincalendarforweek.viewmodel
 
 import androidx.lifecycle.ViewModel
 

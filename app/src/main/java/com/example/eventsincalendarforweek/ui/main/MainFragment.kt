@@ -15,6 +15,7 @@ import com.example.eventsincalendarforweek.repository.RetrofitInstance
 import com.example.eventsincalendarforweek.utility.convertISO8601DateTimeStringToHumanReadableUTCDateTimeString
 import com.example.eventsincalendarforweek.utility.convertISO8601DateTimeStringToUTCDateTimeString
 import com.example.eventsincalendarforweek.utility.getStartAndEndDateTimeStampsOfCurrentWeek
+import com.example.eventsincalendarforweek.viewmodel.MainViewModel
 import retrofit2.HttpException
 import java.io.IOException
 
