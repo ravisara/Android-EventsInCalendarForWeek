@@ -1,7 +1,8 @@
-package com.example.eventsincalendarforweek
+package com.example.eventsincalendarforweek.ui.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.eventsincalendarforweek.R
 import com.example.eventsincalendarforweek.ui.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
