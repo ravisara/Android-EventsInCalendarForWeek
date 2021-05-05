@@ -63,7 +63,7 @@ fun convertISO8601DateTimeStringToHumanReadableUTCDateTimeString(dateTimeStringI
     val dateTimeInUTC = offsetDateTime.withOffsetSameInstant(ZoneOffset.UTC)
 
     val formatter = DateTimeFormatter.ofPattern("E dd MM yyyy HH:mm") // E for day of the week(Mon, Tue etc.)
-    return dateTimeInUTC.format(formatter)
+    return dateTimeInUTC.format(formatter) + " UTC"
 
 }
 

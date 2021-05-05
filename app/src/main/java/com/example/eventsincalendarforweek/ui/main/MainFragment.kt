@@ -1,5 +1,6 @@
 package com.example.eventsincalendarforweek.ui.main
 
+import Resource
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,15 +12,11 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.eventsincalendarforweek.R
-import com.example.eventsincalendarforweek.repository.CalendarEvents
-import com.example.eventsincalendarforweek.utility.convertISO8601DateTimeStringToHumanReadableUTCDateTimeString
-import com.example.eventsincalendarforweek.utility.convertISO8601DateTimeStringToUTCDateTimeString
 import com.example.eventsincalendarforweek.viewmodel.MainViewModel
-import retrofit2.Response
+import com.example.eventsincalendarforweek.repository.Result
 
 const val TAG = "MainFragmentError"
 
-// TODO use view data binding
 class MainFragment : Fragment() {
 
     companion object {
@@ -29,9 +26,10 @@ class MainFragment : Fragment() {
     private lateinit var theRecyclerView: RecyclerView
     private lateinit var customAdapterForRecyclerView: CustomAdapterForRecyclerView
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
-
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         return inflater.inflate(R.layout.main_fragment, container, false)
     }
 
@@ -54,31 +52,19 @@ class MainFragment : Fragment() {
 
         viewModel.getCalendarEventsInCurrentWeek()
 
-        val responseObserver: Observer<Response<CalendarEvents>> = Observer { response ->
-            Log.i(TAG, response.toString())
-            if (response.isSuccessful && response.body() != null) {
-                val apiQueryResponseBodyResults = response.body()!!.results.toMutableList() // is of type List<Result>
-                // for each result, replace the start date time and end date time with human readable counterparts. Also, populate the property that is going to be used for sorting by start date time.
-                for ((idx, result) in apiQueryResponseBodyResults.withIndex()) {
-                    apiQueryResponseBodyResults[idx].startDateTimeWithOnlyDigitsForSorting = convertISO8601DateTimeStringToUTCDateTimeString(result.start) // this property is set to null by retrofit as there is no property called startDateTimeWithOnlyDigitsForSorting in the json response. TODO to make the code cleaner it is best not to modify the Result class and handle this in a different way.
-                    apiQueryResponseBodyResults[idx].start = convertISO8601DateTimeStringToHumanReadableUTCDateTimeString(result.start)
-                    apiQueryResponseBodyResults[idx].end = convertISO8601DateTimeStringToHumanReadableUTCDateTimeString(result.end)
-                }
-
-                // TODO handle multiple pages. I.e. although for one week with the current data set for the week begninng on 3rd May 2021 only one page is returned, it is quite possible that more thank one page is returned for another week.
-                if (response.body()!!.next != null) { // this means there is another page! Another API call has to be made
-
-                }
-
-                val finalResultsToShow = apiQueryResponseBodyResults.sortedBy { it.startDateTimeWithOnlyDigitsForSorting }
-
-                customAdapterForRecyclerView = CustomAdapterForRecyclerView(finalResultsToShow)
+        val responseObserver: Observer<Resource<List<Result>>> = Observer { resource ->
+            Log.i(TAG, resource.toString())
+            if (resource.status == Status.SUCCESS) {
+                customAdapterForRecyclerView = CustomAdapterForRecyclerView(resource.data!!)
                 setupRecyclerView()
+            } else if (resource.status == Status.LOADING) {
+                // TODO show a progress bar (ran out of time to do this)
+            } else if (resource.status == Status.ERROR) {
+                // TODO show an error message (ran out of time to do this)
             }
         }
 
-        viewModel.calendarEventsResponse.observe(viewLifecycleOwner, responseObserver)
-
+        viewModel.tempSolution.observe(viewLifecycleOwner, responseObserver)
     }
 
     private fun setupRecyclerView() = theRecyclerView.apply {
@@ -87,3 +73,4 @@ class MainFragment : Fragment() {
     }
 
 }
+
