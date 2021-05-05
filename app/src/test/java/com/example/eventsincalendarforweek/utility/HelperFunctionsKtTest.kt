@@ -16,32 +16,32 @@ class HelperFunctionsKtTest {
     @Test
     fun convertISO8601DateTimeStringToUTCDateTimeString_when_the_converted_UTC_time_falls_on_same_day() {
         val theResult = convertISO8601DateTimeStringToHumanReadableUTCDateTimeString("2021-05-09T10:00:00+04:00")
-        assertEquals("2021-05-09T06:00Z", theResult)
+        assertEquals("Sun 09 05 2021 06:00 UTC", theResult)
     }
 
     @Test
     fun convertISO8601DateTimeStringToUTCDateTimeString_when_the_UTC_time_falls_on_following_day() {
         val theResult = convertISO8601DateTimeStringToHumanReadableUTCDateTimeString("2021-05-09T23:00:00-04:00")
-        assertEquals("2021-05-10T03:00Z", theResult)
+        assertEquals("Mon 10 05 2021 03:00 UTC", theResult)
     }
 
     @Test
     fun convertISO8601DateTimeStringToUTCDateTimeString_when_the_UTC_time_falls_on_previous_day() {
         val theResult = convertISO8601DateTimeStringToHumanReadableUTCDateTimeString("2021-05-09T00:30:00+04:00")
-        assertEquals("2021-05-08T20:30Z", theResult)
+        assertEquals("Sat 08 05 2021 20:30 UTC", theResult)
     }
 
     // TODO modify these tests to get the required result
     @Test
     fun convertISO8601DateTimeStringToUTCDateTimeString_when_the_when_no_UTC_offset_is_there_result_is_OK() {
         val theResult = convertISO8601DateTimeStringToHumanReadableUTCDateTimeString("2021-05-09T10:00:00Z")
-        assertEquals("2021-05-09T10:00Z", theResult)
+        assertEquals("Sun 09 05 2021 10:00 UTC", theResult)
     }
 
     @Test
     fun convertISO8601DateTimeStringToHumanReadableUTCDateTimeString_when_UTC_converted_time_is_on_same_day() {
         val theResult = convertISO8601DateTimeStringToHumanReadableUTCDateTimeString("2021-05-09T10:00:00+04:00")
-        assertEquals("Sun 09 05 2021 06:00", theResult)
+        assertEquals("Sun 09 05 2021 06:00 UTC", theResult)
     }
 
     @Test
