@@ -2,8 +2,8 @@ package com.example.eventsincalendarforweek.repository
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 
+// TODO combine this with the API interface in the same file
 object RetrofitInstance {
 
     val api: BuzzHireAPI by lazy { // so that this is created at first use and the result is stored.
